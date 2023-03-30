@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ListPeoplePost.Data;
+using System.Dynamic;
 
 namespace ListPeoplePost.Web.Controllers
 {
@@ -26,7 +27,8 @@ namespace ListPeoplePost.Web.Controllers
 
             if (TempData["success-message"] != null)
             {
-                vm.Message = (string)TempData["success-message"];
+                //vm.Message = (string)TempData["success-message"];
+                ViewBag.Message = (string)TempData["success-message"];
             }
 
             return View(vm);
@@ -45,8 +47,22 @@ namespace ListPeoplePost.Web.Controllers
                 people.Where(p => !String.IsNullOrEmpty(p.FirstName) && !String.IsNullOrEmpty(p.LastName)).ToList();
 
             mgr.AddPeople(peopleToAdd);
-            TempData["success-message"] = "People added successfully!";
+            TempData["success-message"] = $"{peopleToAdd.Count} people added successfully!";
             return Redirect("/home/index");
+        }
+
+        public IActionResult AddSingle()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddSingle(Person person)
+        {
+            var mgr = new PersonManager(_connectionString);
+            mgr.AddPerson(person);
+            ViewBag.Message = "Person added successfully";
+            return View();
         }
     }
 }

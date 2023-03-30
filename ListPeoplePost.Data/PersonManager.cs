@@ -56,7 +56,7 @@ namespace ListPeoplePost.Data
             //}
         }
 
-        private void AddPerson(Person person)
+        public void AddPerson(Person person)
         {
             using var conn = new SqlConnection(_connectionString);
             using var cmd = conn.CreateCommand();
